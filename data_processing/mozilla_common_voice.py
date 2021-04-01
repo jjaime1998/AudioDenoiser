@@ -21,10 +21,10 @@ class MozillaCommonVoiceDataset:
         clean_files = self._get_common_voice_filenames(dataframe_name='train.tsv')
 
         # resolve full path
-        clean_files = [os.path.join(self.basepath, 'clips', 'train', filename) for filename in clean_files]
+        clean_files = [os.path.join(self.basepath, 'clips',  filename) for filename in clean_files]
 
-        clean_files = clean_files[:-self.val_dataset_size]
         clean_val_files = clean_files[-self.val_dataset_size:]
+        clean_files = clean_files[:-self.val_dataset_size]
         print("# of Training clean files:", len(clean_files))
         print("# of  Validation clean files:", len(clean_val_files))
         return clean_files, clean_val_files
@@ -34,7 +34,7 @@ class MozillaCommonVoiceDataset:
         clean_files = self._get_common_voice_filenames(dataframe_name='test.tsv')
 
         # resolve full path
-        clean_files = [os.path.join(self.basepath, 'clips', 'test', filename) for filename in clean_files]
+        clean_files = [os.path.join(self.basepath, 'clips',  filename) for filename in clean_files]
 
         print("# of Testing clean files:", len(clean_files))
         return clean_files

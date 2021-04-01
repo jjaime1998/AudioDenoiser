@@ -1,5 +1,6 @@
 import librosa
 import scipy
+import numpy as np
 
 
 class FeatureExtractor:
@@ -18,6 +19,10 @@ class FeatureExtractor:
     def get_audio_from_stft_spectrogram(self, stft_features):
         return librosa.istft(stft_features, win_length=self.window_length, hop_length=self.overlap,
                              window=self.window, center=True)
+    
+    def get_audio_from_stft_spectrogram_GL(self, stft_features):
+        return librosa.griffinlim(stft_features, init=None,
+                win_length=self.window_length, hop_length=self.overlap, window=self.window, center=True)
 
     def get_mel_spectrogram(self):
         return librosa.feature.melspectrogram(self.audio, sr=self.sample_rate, power=2.0, pad_mode='reflect',

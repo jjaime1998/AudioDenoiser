@@ -166,4 +166,4 @@ class Dataset:
                     writer.write(example.SerializeToString())
 
             counter += 1
-            writer.close()
+        writer.close()

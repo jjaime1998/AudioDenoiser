@@ -3,7 +3,7 @@ import numpy as np
 from utils import play
 from data_processing.feature_extractor import FeatureExtractor
 
-train_tfrecords_filenames = './data_processing/test_0.tfrecords'
+train_tfrecords_filenames = './records/test_0.tfrecords'
 
 def tf_record_parser(record):
     keys_to_features = {

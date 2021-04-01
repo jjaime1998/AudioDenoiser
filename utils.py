@@ -3,7 +3,7 @@ import pickle
 import librosa
 import sounddevice as sd
 import tensorflow as tf
-
+import soundfile as sf
 
 def inverse_stft_transform(stft_features, window_length, overlap):
     return librosa.istft(stft_features, win_length=window_length, hop_length=overlap)
@@ -43,14 +43,23 @@ def add_noise_to_clean_audio(clean_audio, noise_signal):
     noisyAudio = clean_audio + np.sqrt(speech_power / noise_power) * noiseSegment
     return noisyAudio
 
+#def read_audio(filepath, sample_rate, normalize=True):
+#    audio, sr = librosa.load(filepath, sr=sample_rate)
+
 def read_audio(filepath, sample_rate, normalize=True):
+    # print(f"Reading: {filepath}").
     audio, sr = librosa.load(filepath, sr=sample_rate)
+    if normalize:
+      div_fac = 1 / np.max(np.abs(audio)) / 3.0
+      audio = audio * div_fac
+    return audio, sr
+      
+def write_audio(filepath, sample_rate, audio, normalize=True):
     if normalize is True:
         div_fac = 1 / np.max(np.abs(audio)) / 3.0
         audio = audio * div_fac
-        # audio = librosa.util.normalize(audio)
-    return audio, sr
-
+    
+    sf.write(filepath, audio, int(sample_rate))
 
 def prepare_input_features(stft_features, numSegments, numFeatures):
     noisySTFT = np.concatenate([stft_features[:, 0:numSegments - 1], stft_features], axis=1)
@@ -101,3 +110,25 @@ def get_tf_feature(noise_stft_mag_features, clean_stft_magnitude, noise_stft_pha
         'noise_stft_mag_features': _bytes_feature(noise_stft_mag_features),
         'clean_stft_magnitude': _bytes_feature(clean_stft_magnitude)}))
     return example
+
+
+def tf_record_parser(record):
+    keys_to_features = {
+        "noise_stft_phase": tf.io.FixedLenFeature((), tf.string, default_value=""),
+        'noise_stft_mag_features': tf.io.FixedLenFeature([], tf.string),
+        "clean_stft_magnitude": tf.io.FixedLenFeature((), tf.string)
+    }
+
+    features = tf.io.parse_single_example(record, keys_to_features)
+
+    noise_stft_mag_features = tf.io.decode_raw(features['noise_stft_mag_features'], tf.float32)
+    clean_stft_magnitude = tf.io.decode_raw(features['clean_stft_magnitude'], tf.float32)
+    noise_stft_phase = tf.io.decode_raw(features['noise_stft_phase'], tf.float32)
+
+    # reshape input and annotation images
+    noise_stft_mag_features = tf.reshape(noise_stft_mag_features, (129, 8, 1), name="noise_stft_mag_features")
+    clean_stft_magnitude = tf.reshape(clean_stft_magnitude, (129, 1, 1), name="clean_stft_magnitude")
+    noise_stft_phase = tf.reshape(noise_stft_phase, (129,), name="noise_stft_phase")
+
+    return noise_stft_mag_features, clean_stft_magnitude
+

@@ -1,22 +1,20 @@
 from data_processing.mozilla_common_voice import MozillaCommonVoiceDataset
 from data_processing.urban_sound_8K import UrbanSound8K
 from data_processing.dataset import Dataset
+from default_config import args
 import warnings
 
 warnings.filterwarnings(action='ignore')
 
-mozilla_basepath = '/home/thallessilva/Documents/datasets/en'
-urbansound_basepath = '/home/thallessilva/Documents/datasets/UrbanSound8K'
-
-mcv = MozillaCommonVoiceDataset(mozilla_basepath, val_dataset_size=1000)
+mcv = MozillaCommonVoiceDataset(args.mozilla_basepath, val_dataset_size=1000)
 clean_train_filenames, clean_val_filenames = mcv.get_train_val_filenames()
 
-us8K = UrbanSound8K(urbansound_basepath, val_dataset_size=200)
+us8K = UrbanSound8K(args.urbansound_basepath, val_dataset_size=200)
 noise_train_filenames, noise_val_filenames = us8K.get_train_val_filenames()
 
-windowLength = 256
-config = {'windowLength': windowLength,
-          'overlap': round(0.25 * windowLength),
+
+config = {'windowLength': args.windowLength,
+          'overlap': round(0.25 * args.windowLength),
           'fs': 16000,
           'audio_max_duration': 0.8}
 
@@ -33,5 +31,6 @@ noise_test_filenames = us8K.get_test_filenames()
 noise_test_filenames = noise_test_filenames
 
 test_dataset = Dataset(clean_test_filenames, noise_test_filenames, **config)
-test_dataset.create_tf_record(prefix='test', subset_size=1, parallel=False)
+#test_dataset.create_tf_record(prefix='test', subset_size=1, parallel=False)
+test_dataset.create_tf_record(prefix='test', subset_size=1000, parallel=False)
 
