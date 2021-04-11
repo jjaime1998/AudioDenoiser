@@ -89,8 +89,8 @@ if __name__ == '__main__':
        features = features * np.exp(1j * phase)  # that fixes the abs() ope previously done
 
        features = np.transpose(features, (1, 0))
-       return noiseAudioFeatureExtractor.get_audio_from_stft_spectrogram(features)
-       #return noiseAudioFeatureExtractor.get_audio_from_stft_spectrogram_GL(np.abs(features))
+       #return noiseAudioFeatureExtractor.get_audio_from_stft_spectrogram(features)
+       return noiseAudioFeatureExtractor.get_audio_from_stft_spectrogram_GL(np.abs(features))
 
    noisyPhase = np.angle(noise_stft_features)
    print(noisyPhase.shape)
