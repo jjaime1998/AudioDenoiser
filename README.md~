@@ -22,8 +22,13 @@ You will then need to update the paths of these datasets in default_config.py.
 
 Use train.py to train an audio denoiser
 
+## Testing
+
+Use test.py to test the audio denoiser with one track
+
 ## Requirements
 
 You need to install tensorflow and keras and some other bits and pieces.  It
-would be best to follow the guidance on installing TF on it's website.
+would be best to follow the guidance on installing TF on it's website (i.e. use
+within a virtual environment)
 

@@ -16,7 +16,7 @@ below.
 
 You can then use ```create_dataset.py``` script to create the TFRecord files. 
 
-You will then need to update the paths of these datasets in default_config.py.
+You will then need to update the paths of these datasets in ```default_config.py```.
 
 ## Training
 
