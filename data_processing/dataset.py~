@@ -136,7 +136,7 @@ class Dataset:
                 print(f"Skipping {tfrecord_filename}")
                 counter += 1
                 continue
-
+            print(os.getcwd())
             writer = tf.io.TFRecordWriter(tfrecord_filename)
             clean_filenames_sublist = self.clean_filenames[i:i + subset_size]
 
@@ -166,4 +166,4 @@ class Dataset:
                     writer.write(example.SerializeToString())
 
             counter += 1
-            writer.close()
+        writer.close()

@@ -1,6 +1,6 @@
 import tensorflow as tf
 import os
-from keras_radam import RAdam
+#from keras_radam import RAdam
 import librosa
 import pandas as pd
 import os
@@ -105,7 +105,7 @@ if __name__ == '__main__':
    checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(filepath=os.path.join(mozilla_basepath, 'denoiser_cnn_log_mel_generator.h5'), 
                                                          monitor='val_loss', save_best_only=True)
 
-   model.fit(train_dataset,
+   model.fit(train_dataset,verbose=2,
          steps_per_epoch=600,
          validation_data=test_dataset,
          epochs=9999,

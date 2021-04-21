@@ -1,9 +1,9 @@
 
 class args(object):
 
-   home_dir            = '/home/csprh/MYCODE/AUDIO/cnn_denoiser/' 
-   mozilla_basepath    = '/media/csprh/B0C87E48C87E0CBA/Data/'
-   urbansound_basepath = '/media/csprh/B0C87E48C87E0CBA/Data/UrbanSound8K'
+   home_dir            = '/mnt/storage/scratch/csprh/code/AudioDenoiser' 
+   mozilla_basepath    = '/mnt/storage/scratch/csprh/AUDIO/DATASETS/'
+   urbansound_basepath = '/mnt/storage/scratch/csprh/AUDIO/DATASETS/UrbanSound8K'
    windowLength        = 256
    ffTLength           = windowLength
    inputFs             = 48e3
