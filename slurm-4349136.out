@@ -66,3 +66,21 @@ coreClock: 1.3285GHz coreCount: 56 deviceMemorySize: 15.90GiB deviceMemoryBandwi
 2021-04-21 22:52:49.977176: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1108]      0 
 2021-04-21 22:52:49.977186: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1121] 0:   N 
 2021-04-21 22:52:49.980066: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1247] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 15056 MB memory) -> physical GPU (device: 0, name: Tesla P100-PCIE-16GB, pci bus id: 0000:86:00.0, compute capability: 6.0)
+2021-04-21 22:52:56.826917: I tensorflow/core/profiler/lib/profiler_session.cc:159] Profiler session started.
+2021-04-21 22:52:56.828407: I tensorflow/core/profiler/internal/gpu/cupti_tracer.cc:1363] Profiler found 1 GPUs
+2021-04-21 22:52:56.872197: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcupti.so.10.1
+2021-04-21 22:52:57.027286: I tensorflow/core/profiler/internal/gpu/cupti_tracer.cc:1479] CUPTI activity buffer flushed
+2021-04-21 22:52:59.767784: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2021-04-21 22:53:04.157156: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10
+2021-04-21 22:53:05.072884: I tensorflow/core/profiler/lib/profiler_session.cc:159] Profiler session started.
+2021-04-21 22:53:05.113457: I tensorflow/core/profiler/internal/gpu/cupti_tracer.cc:1479] CUPTI activity buffer flushed
+2021-04-21 22:53:05.124609: I tensorflow/core/profiler/internal/gpu/device_tracer.cc:216]  GpuTracer has collected 459 callback api events and 459 activity events.
+2021-04-21 22:53:05.169298: I tensorflow/core/profiler/rpc/client/save_profile.cc:168] Creating directory: logs/20210421-225256/train/plugins/profile/2021_04_21_22_53_05
+2021-04-21 22:53:05.193853: I tensorflow/core/profiler/rpc/client/save_profile.cc:174] Dumped gzipped tool data for trace.json.gz to logs/20210421-225256/train/plugins/profile/2021_04_21_22_53_05/gpu19.bc4.acrc.priv.trace.json.gz
+2021-04-21 22:53:05.207037: I tensorflow/core/profiler/utils/event_span.cc:288] Generation of step-events took 0.196 ms
+
+2021-04-21 22:53:05.215592: I tensorflow/python/profiler/internal/profiler_wrapper.cc:87] Creating directory: logs/20210421-225256/train/plugins/profile/2021_04_21_22_53_05Dumped tool data for overview_page.pb to logs/20210421-225256/train/plugins/profile/2021_04_21_22_53_05/gpu19.bc4.acrc.priv.overview_page.pb
+Dumped tool data for input_pipeline.pb to logs/20210421-225256/train/plugins/profile/2021_04_21_22_53_05/gpu19.bc4.acrc.priv.input_pipeline.pb
+Dumped tool data for tensorflow_stats.pb to logs/20210421-225256/train/plugins/profile/2021_04_21_22_53_05/gpu19.bc4.acrc.priv.tensorflow_stats.pb
+Dumped tool data for kernel_stats.pb to logs/20210421-225256/train/plugins/profile/2021_04_21_22_53_05/gpu19.bc4.acrc.priv.kernel_stats.pb
+
