@@ -14,6 +14,7 @@ class MozillaCommonVoiceDataset:
         mozilla_metadata = pd.read_csv(os.path.join(self.basepath, dataframe_name), sep='\t')
         clean_files = mozilla_metadata['path'].values
         np.random.shuffle(clean_files)
+        clean_files = clean_files[0:6000] #PRH reduce the number of files:
         print("Total number of training examples:", len(clean_files))
         return clean_files
 

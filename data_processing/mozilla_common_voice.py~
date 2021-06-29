@@ -13,7 +13,8 @@ class MozillaCommonVoiceDataset:
     def _get_common_voice_filenames(self, dataframe_name='train.tsv'):
         mozilla_metadata = pd.read_csv(os.path.join(self.basepath, dataframe_name), sep='\t')
         clean_files = mozilla_metadata['path'].values
-        np.random.shuffle(clean_files)
+	np.random.shuffle(clean_files)
+	clean_files = clean_files[0:6000] #PRH reduce the number of files:
         print("Total number of training examples:", len(clean_files))
         return clean_files
 
@@ -22,7 +23,6 @@ class MozillaCommonVoiceDataset:
 
         # resolve full path
         clean_files = [os.path.join(self.basepath, 'clips',  filename) for filename in clean_files]
-
 
         clean_val_files = clean_files[-self.val_dataset_size:]
         clean_files = clean_files[:-self.val_dataset_size]
