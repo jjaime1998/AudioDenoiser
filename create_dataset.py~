@@ -4,7 +4,6 @@ from data_processing.dataset import Dataset
 from default_config import args
 import warnings
 
-from pudb import set_trace; set_trace()
 warnings.filterwarnings(action='ignore')
 
 mcv = MozillaCommonVoiceDataset(args.mozilla_basepath, val_dataset_size=1000)
