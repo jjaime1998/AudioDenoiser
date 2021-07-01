@@ -36,6 +36,6 @@ class MozillaCommonVoiceDataset:
 
         # resolve full path
         clean_files = [os.path.join(self.basepath, 'clips',  filename) for filename in clean_files]
-
+        clean_files = clean_files[0:200] #PRH reduce the number of files
         print("# of Testing clean files:", len(clean_files))
         return clean_files
