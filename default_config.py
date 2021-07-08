@@ -1,6 +1,6 @@
 
 class args(object):
-   home_dir            = '/mnt/storage/scratch/csprh/code/tmp/AudioDenoiser'
+   home_dir            = '/mnt/storage/home/ka20094/AudioDenoiser'
    mozilla_basepath    = '/mnt/storage/scratch/csprh/AUDIO/DATASETS/'
    urbansound_basepath = '/mnt/storage/scratch/csprh/AUDIO/DATASETS/UrbanSound8K'
    windowLength        = 256
