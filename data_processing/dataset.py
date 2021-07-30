@@ -15,16 +15,16 @@ tf.random.set_seed(999)
 
 
 class Dataset:
-    def __init__(self, clean_filenames, noise_filenames, **config):
+    def __init__(self, clean_filenames, **config):
         self.clean_filenames = clean_filenames
-        self.noise_filenames = noise_filenames
+        #self.noise_filenames = noise_filenames
         self.sample_rate = config['fs']
         self.overlap = config['overlap']
         self.window_length = config['windowLength']
         self.audio_max_duration = config['audio_max_duration']
 
-    def _sample_noise_filename(self):
-        return np.random.choice(self.noise_filenames)
+   # def _sample_noise_filename(self):
+     #   return np.random.choice(self.noise_filenames)
 
     def _remove_silent_frames(self, audio):
         trimed_audio = []
@@ -54,8 +54,8 @@ class Dataset:
         idx = np.random.randint(0, audio_duration_ms - duration_ms)
         return audio[idx: idx + duration_ms]
 
-    def _add_noise_to_clean_audio(self, clean_audio, noise_signal):
-        if len(clean_audio) >= len(noise_signal):
+    def _add_noise_to_clean_audio(self, clean_audio):
+      '''  if len(clean_audio) >= len(noise_signal):
             # print("The noisy signal is smaller than the clean audio input. Duplicating the noise.")
             while len(clean_audio) >= len(noise_signal):
                 noise_signal = np.append(noise_signal, noise_signal)
@@ -69,6 +69,14 @@ class Dataset:
         noise_power = np.sum(noiseSegment ** 2)
         noisyAudio = clean_audio + np.sqrt(speech_power / noise_power) * noiseSegment
         return noisyAudio
+        '''
+        fft_y = fft(clean_audio)
+        abs_y = np.abs(fft_y)  # 取复数的绝对值，即复数的模(双边频谱)
+        angle_y = np.angle(fft_y)  # 取复数的角度
+        Y_reset = abs_y
+        noisyAudio = ifft(Y_reset)
+        return noisyAudio
+    
 
     def parallel_audio_processing(self, clean_filename):
 
@@ -77,19 +85,19 @@ class Dataset:
         # remove silent frame from clean audio
         clean_audio = self._remove_silent_frames(clean_audio)
 
-        noise_filename = self._sample_noise_filename()
+      #  noise_filename = self._sample_noise_filename()
 
         # read the noise filename
-        noise_audio, sr = read_audio(noise_filename, self.sample_rate)
+       # noise_audio, sr = read_audio(noise_filename, self.sample_rate)
 
         # remove silent frame from noise audio
-        noise_audio = self._remove_silent_frames(noise_audio)
+      #  noise_audio = self._remove_silent_frames(noise_audio)
 
         # sample random fixed-sized snippets of audio
         clean_audio = self._audio_random_crop(clean_audio, duration=self.audio_max_duration)
 
         # add noise to input image
-        noiseInput = self._add_noise_to_clean_audio(clean_audio, noise_audio)
+        noiseInput = self._add_noise_to_clean_audio(clean_audio)
 
         # extract stft features from noisy audio
         noisy_input_fe = FeatureExtractor(noiseInput, windowLength=self.window_length, overlap=self.overlap,
@@ -122,7 +130,7 @@ class Dataset:
         noise_magnitude = scaler.fit_transform(noise_magnitude)
         clean_magnitude = scaler.transform(clean_magnitude)
 
-        return noise_magnitude, clean_magnitude, noise_phase
+        return noise_magnitude, clean_phase, noise_phase
 
     def create_tf_record(self, *, prefix, subset_size, parallel=True):
         counter = 0
@@ -148,19 +156,19 @@ class Dataset:
 
             for o in out:
                 noise_stft_magnitude = o[0]
-                clean_stft_magnitude = o[1]
+                clean_stft_phase = o[1]
                 noise_stft_phase = o[2]
 
                 noise_stft_mag_features = prepare_input_features(noise_stft_magnitude, numSegments=8, numFeatures=129)
 
                 noise_stft_mag_features = np.transpose(noise_stft_mag_features, (2, 0, 1))
-                clean_stft_magnitude = np.transpose(clean_stft_magnitude, (1, 0))
+                clean_stft_phase = np.transpose(clean_stft_phase, (1, 0))
                 noise_stft_phase = np.transpose(noise_stft_phase, (1, 0))
 
                 noise_stft_mag_features = np.expand_dims(noise_stft_mag_features, axis=3)
-                clean_stft_magnitude = np.expand_dims(clean_stft_magnitude, axis=2)
+                clean_stft_phase = np.expand_dims(clean_stft_phase, axis=2)
 
-                for x_, y_, p_ in zip(noise_stft_mag_features, clean_stft_magnitude, noise_stft_phase):
+                for x_, y_, p_ in zip(noise_stft_mag_features, clean_stft_phase, noise_stft_phase):
                     y_ = np.expand_dims(y_, 2)
                     example = get_tf_feature(x_, y_, p_)
                     writer.write(example.SerializeToString())
