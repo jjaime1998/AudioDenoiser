@@ -35,21 +35,21 @@ def tf_record_parser(record):
     keys_to_features = {
         "noise_stft_phase": tf.io.FixedLenFeature((), tf.string, default_value=""),
         'noise_stft_mag_features': tf.io.FixedLenFeature([], tf.string),
-        "clean_stft_magnitude": tf.io.FixedLenFeature((), tf.string)
+        "clean_stft_phase": tf.io.FixedLenFeature((), tf.string)
     }
 
     features = tf.io.parse_single_example(record, keys_to_features)
 
     noise_stft_mag_features = tf.io.decode_raw(features['noise_stft_mag_features'], tf.float32)
-    clean_stft_magnitude = tf.io.decode_raw(features['clean_stft_magnitude'], tf.float32)
+    clean_stft_phase = tf.io.decode_raw(features['clean_stft_phase'], tf.float32)
     noise_stft_phase = tf.io.decode_raw(features['noise_stft_phase'], tf.float32)
 
     # reshape input and annotation images
     noise_stft_mag_features = tf.reshape(noise_stft_mag_features, (129, 8, 1), name="noise_stft_mag_features")
-    clean_stft_magnitude = tf.reshape(clean_stft_magnitude, (129, 1, 1), name="clean_stft_magnitude")
+    clean_stft_phase = tf.reshape(clean_stft_phase, (129, 1, 1), name="clean_stft_phase")
     noise_stft_phase = tf.reshape(noise_stft_phase, (129,), name="noise_stft_phase")
 
-    return noise_stft_mag_features, clean_stft_magnitude
+    return noise_stft_mag_features, clean_stft_phase
 
 
 if __name__ == '__main__':
