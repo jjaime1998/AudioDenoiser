@@ -66,26 +66,26 @@ if __name__ == '__main__':
 
    cleanAudio, sr = read_audio(os.path.join(mozilla_basepath, 'clips', 'common_voice_en_16526.mp3'), sample_rate=fs)
    print("Min:", np.min(cleanAudio),"Max:",np.max(cleanAudio))
- 
+ '''
    noiseAudio, sr = read_audio(os.path.join(urbansound_basepath, 'audio', 'fold10', '7913-3-0-0.wav'), sample_rate=fs)
    print("Min:", np.min(noiseAudio),"Max:",np.max(noiseAudio))
-
+ '''
    cleanAudioFeatureExtractor = FeatureExtractor(cleanAudio, windowLength=windowLength, overlap=overlap, sample_rate=sr)
    stft_features = cleanAudioFeatureExtractor.get_stft_spectrogram()
    stft_features = np.abs(stft_features)
    print("Min:", np.min(stft_features),"Max:",np.max(stft_features))
 
-   noisyAudio = add_noise_to_clean_audio(cleanAudio, noiseAudio)
+   noisyAudio = add_noise_to_clean_audio(cleanAudio)
    noiseAudioFeatureExtractor = FeatureExtractor(noisyAudio, windowLength=windowLength, overlap=overlap, sample_rate=sr)
    noise_stft_features = noiseAudioFeatureExtractor.get_stft_spectrogram()
 
-   def revert_features_to_audio2(features, phase, cleanMean=None, cleanStd=None):
+   def revert_features_to_audio2(features, magnitude, cleanMean=None, cleanStd=None):
     # scale the outpus back to the original range
        if cleanMean and cleanStd:
           features = cleanStd * features + cleanMean
 
-       phase = np.transpose(phase, (1, 0))
-       features = np.squeeze(features)
+       phase = np.transpose(features, (1, 0))
+       features = np.squeeze(magnitude)
        features = features * np.exp(1j * phase)  # that fixes the abs() ope previously done
 
        features = np.transpose(features, (1, 0))
@@ -95,6 +95,7 @@ if __name__ == '__main__':
    noisyPhase = np.angle(noise_stft_features)
    print(noisyPhase.shape)
    noise_stft_features = np.abs(noise_stft_features)
+   noisyMagnitude = noise_stft_features
 
    mean = np.mean(noise_stft_features)
    std = np.std(noise_stft_features)
@@ -110,7 +111,7 @@ if __name__ == '__main__':
    STFTFullyConvolutional = model.predict(predictors)
    print(STFTFullyConvolutional.shape)
 
-   denoisedAudioFullyConvolutional = revert_features_to_audio2(STFTFullyConvolutional, noisyPhase,  mean, std)
+   denoisedAudioFullyConvolutional = revert_features_to_audio2(STFTFullyConvolutional, noisyMagnitude,  mean, std)
    print("Min:", np.min(denoisedAudioFullyConvolutional),"Max:",np.max(denoisedAudioFullyConvolutional))
  #  ipd.Audio(data=denoisedAudioFullyConvolutional, rate=fs) # load a local WAV file
 
