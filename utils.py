@@ -27,21 +27,25 @@ def play(audio, sample_rate):
     #sd.play(audio, sample_rate, blocking=True)
 
 
-def add_noise_to_clean_audio(clean_audio, noise_signal):
-    if len(clean_audio) >= len(noise_signal):
-        # print("The noisy signal is smaller than the clean audio input. Duplicating the noise.")
-        while len(clean_audio) >= len(noise_signal):
-            noise_signal = np.append(noise_signal, noise_signal)
-
-    ## Extract a noise segment from a random location in the noise file
-    ind = np.random.randint(0, noise_signal.size - clean_audio.size)
-
-    noiseSegment = noise_signal[ind: ind + clean_audio.size]
-
-    speech_power = np.sum(clean_audio ** 2)
-    noise_power = np.sum(noiseSegment ** 2)
-    noisyAudio = clean_audio + np.sqrt(speech_power / noise_power) * noiseSegment
-    return noisyAudio
+def _add_noise_to_clean_audio(self, clean_audio):
+      '''  if len(clean_audio) >= len(noise_signal):
+            # print("The noisy signal is smaller than the clean audio input. Duplicating the noise.")
+            while len(clean_audio) >= len(noise_signal):
+                noise_signal = np.append(noise_signal, noise_signal)
+        ## Extract a noise segment from a random location in the noise file
+        ind = np.random.randint(0, noise_signal.size - clean_audio.size)
+        noiseSegment = noise_signal[ind: ind + clean_audio.size]
+        speech_power = np.sum(clean_audio ** 2)
+        noise_power = np.sum(noiseSegment ** 2)
+        noisyAudio = clean_audio + np.sqrt(speech_power / noise_power) * noiseSegment
+        return noisyAudio
+        '''
+        fft_y = fft(clean_audio)
+        abs_y = np.abs(fft_y)  # 取复数的绝对值，即复数的模(双边频谱)
+        angle_y = np.angle(fft_y)  # 取复数的角度
+        Y_reset = abs_y
+        noisyAudio = ifft(Y_reset)
+        return noisyAudio
 
 #def read_audio(filepath, sample_rate, normalize=True):
 #    audio, sr = librosa.load(filepath, sr=sample_rate)
