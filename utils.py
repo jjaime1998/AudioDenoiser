@@ -29,10 +29,10 @@ def play(audio, sample_rate):
 
 def _add_noise_to_clean_audio(self, clean_audio):
       
-        fft_y = librosa.core.fft(clean_audio)
+        fft_y = librosa.stft(clean_audio)
         abs_y = np.abs(fft_y)   
         y_reset = abs_y
-        noisyAudio = librosa.core.ifft(y_reset)
+        noisyAudio = librosa.istft(y_reset)
         return noisyAudio
 
 #def read_audio(filepath, sample_rate, normalize=True):
