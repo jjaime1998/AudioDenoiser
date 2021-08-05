@@ -56,10 +56,10 @@ class Dataset:
 
     def _add_noise_to_clean_audio(self, clean_audio):
       
-        fft_y = librosa.core.fft(clean_audio)
+        fft_y = librosa.stft(clean_audio)
         abs_y = np.abs(fft_y)   
         y_reset = abs_y
-        noisyAudio = librosa.core.ifft(y_reset)
+        noisyAudio = librosa.istft(y_reset)
         return noisyAudio
     
 
@@ -109,7 +109,7 @@ class Dataset:
         clean_magnitude = np.abs(clean_spectrogram)
         # clean_magnitude = 2 * clean_magnitude / np.sum(scipy.signal.hamming(self.window_length, sym=False))
 
-        clean_magnitude = self._phase_aware_scaling(clean_magnitude, clean_phase, noise_phase)
+        # clean_magnitude = self._phase_aware_scaling(clean_magnitude, clean_phase, noise_phase)
 
         scaler = StandardScaler(copy=False, with_mean=True, with_std=True)
         noise_magnitude = scaler.fit_transform(noise_magnitude)
