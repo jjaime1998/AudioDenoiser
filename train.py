@@ -35,7 +35,7 @@ def tf_record_parser(record):
     keys_to_features = {
         "noise_stft_phase": tf.io.FixedLenFeature((), tf.string, default_value=""),
         'noise_stft_mag_features': tf.io.FixedLenFeature([], tf.string),
-        "clean_stft_phase": tf.io.FixedLenFeature((), tf.string)
+        "clean_stft_phase": tf.io.FixedLenFeature((), tf.string, default_value="")
     }
 
     features = tf.io.parse_single_example(record, keys_to_features)
