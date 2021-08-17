@@ -8,7 +8,7 @@ import os
 from utils import get_tf_feature, read_audio
 import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
-
+from scipy.fftpack import fft,ifft
 
 np.random.seed(999)
 tf.random.set_seed(999)
@@ -56,10 +56,10 @@ class Dataset:
 
     def _add_noise_to_clean_audio(self, clean_audio):
       
-        fft_y = librosa.stft(clean_audio)
+        fft_y = fft(clean_audio)
         abs_y = np.abs(fft_y)   
         y_reset = abs_y
-        noisyAudio = librosa.istft(y_reset)
+        noisyAudio = ifft(y_reset)
         return noisyAudio
     
 
@@ -113,7 +113,7 @@ class Dataset:
 
         scaler = StandardScaler(copy=False, with_mean=True, with_std=True)
         noise_magnitude = scaler.fit_transform(noise_magnitude)
-        clean_magnitude = scaler.transform(clean_magnitude)
+        # clean_magnitude = scaler.transform(clean_magnitude)
 
         return noise_magnitude, clean_phase, noise_phase
 
@@ -151,10 +151,10 @@ class Dataset:
                 noise_stft_phase = np.transpose(noise_stft_phase, (1, 0))
 
                 noise_stft_mag_features = np.expand_dims(noise_stft_mag_features, axis=3)
-                clean_stft_phase = np.expand_dims(clean_stft_phase, axis=2)
+                # clean_stft_phase = np.expand_dims(clean_stft_phase, axis=2)
 
                 for x_, y_, p_ in zip(noise_stft_mag_features, clean_stft_phase, noise_stft_phase):
-                    y_ = np.expand_dims(y_, 2)
+                    # y_ = np.expand_dims(y_, 2)
                     example = get_tf_feature(x_, y_, p_)
                     writer.write(example.SerializeToString())
 
