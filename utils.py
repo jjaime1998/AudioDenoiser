@@ -3,6 +3,7 @@ import pickle
 import librosa
 import tensorflow as tf
 import soundfile as sf
+from scipy.fftpack import fft,ifft
 
 def inverse_stft_transform(stft_features, window_length, overlap):
     return librosa.istft(stft_features, win_length=window_length, hop_length=overlap)
@@ -29,10 +30,10 @@ def play(audio, sample_rate):
 
 def _add_noise_to_clean_audio(self, clean_audio):
       
-        fft_y = librosa.stft(clean_audio)
+        fft_y = fft(clean_audio)
         abs_y = np.abs(fft_y)   
         y_reset = abs_y
-        noisyAudio = librosa.istft(y_reset)
+        noisyAudio = ifft(y_reset)
         return noisyAudio
 
 #def read_audio(filepath, sample_rate, normalize=True):
