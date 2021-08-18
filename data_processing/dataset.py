@@ -151,10 +151,10 @@ class Dataset:
                 noise_stft_phase = np.transpose(noise_stft_phase, (1, 0))
 
                 noise_stft_mag_features = np.expand_dims(noise_stft_mag_features, axis=3)
-                # clean_stft_phase = np.expand_dims(clean_stft_phase, axis=2)
+                clean_stft_phase = np.expand_dims(clean_stft_phase, axis=2)
 
                 for x_, y_, p_ in zip(noise_stft_mag_features, clean_stft_phase, noise_stft_phase):
-                    # y_ = np.expand_dims(y_, 2)
+                    y_ = np.expand_dims(y_, 2)
                     example = get_tf_feature(x_, y_, p_)
                     writer.write(example.SerializeToString())
 
