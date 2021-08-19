@@ -84,8 +84,8 @@ if __name__ == '__main__':
        if cleanMean and cleanStd:
           features = cleanStd * features + cleanMean
 
-       phase = np.transpose(features, (1, 0))
-       features = np.squeeze(magnitude)
+       phase = np.squeeze(features)
+       features = np.transpose(magnitude, (1,0))
        features = features * np.exp(1j * phase)  # that fixes the abs() ope previously done
 
        features = np.transpose(features, (1, 0))
